@@ -1,5 +1,5 @@
 class createTodo {
-    constructor(title, description, dueDate, priority, checklist) {
+    constructor(title, description, dueDate, priority, checklist = []) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
