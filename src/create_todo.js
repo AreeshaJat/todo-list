@@ -1,4 +1,5 @@
 const todo = [];
+var modal = document.getElementById('myModal');
 class createTodo {
     constructor(title, description, dueDate, priority, checklist) {
         this.title = title;
@@ -26,21 +27,79 @@ function displayTodo() {
         var card = document.createElement("div");
         card.className = "card";
 
+        var cardContents = document.createElement("div");
+        cardContents.className = "cardContents";
+
         var priority = document.createElement("div");
         priority.classList.add('priority');
-        priority.textContent = todo.priority;
-        card.appendChild(priority)
+        priority.textContent = todos.priority;
+        cardContents.appendChild(priority);
 
-        var checklist = document.createElement("button");
-        checklist.className = "checklist-toggle";
-        checklist.textContent = todos.checklist ? "Yes" : "No";
+        var checklist = document.createElement("input");
+        checklist.classList.add('checklist');
+        checklist.type = 'checkbox';
+        cardContents.appendChild(checklist);
 
-        
+        var description = document.createElement("p");
+        description.classList.add('description');
+        description.textContent = todos.description;
+        cardContents.appendChild(description);
+
+        var dueDate = document.createElement("p");
+        dueDate.classList.add('dueDate');
+        dueDate.textContent = todos.dueDate;
+        cardContents.appendChild(dueDate);
+
+        card.appendChild(cardContents);
+        todoCard.appendChild(card);
     }
 }
 
+function submitInfo(event, errorMessage) {
+    event.preventDefault();
+
+    const todo_project = document.querySelector('input[name=project]').value;
+    var project = document.createElement('input');
+    project.type = 'text';
+    project.name = 'project';
+    project.placeholder = 'Project';
+    const todo_title = document.querySelector('input[name=taskName]').value;
+    const todo_description = document.querySelector('input[name=description]').value;
+    const todo_dueDate = document.querySelector('input[name=inputDate]').value;
+    const todo_priority = document.querySelector('select[name=priority]').value;
+
+    // Validate the title input
+    if (!todo_title || !todo_description || !todo_dueDate || !todo_priority || !todo_project) {
+        errorMessage.textContent = 'Field is required.';
+        return;
+    } else {
+        errorMessage.textContent = '';
+    }
+
+    addTodoToList(todo_title, todo_description, todo_dueDate, todo_priority, false);
+
+    //clear input fields
+    document.querySelector('input[name="project"]').value = "";
+    document.querySelector('input[name="taskName"]').value = "";
+    document.querySelector('input[name="description"]').value = "";
+    document.querySelector('input[name="inputDate"]').value = "";
+    document.querySelector('select[name="priority"]').value = "";
+
+    closeModal();
+    displayTodo();
+
+}
+
+function openModal () {
+    modal.style.display = "block";
+}
+
+function closeModal () {
+    modal.style.display = "none";
+}
+
 function input() {
-    var modal = document.getElementById('myModal');
+    //var modal = document.getElementById('myModal');
 
     modal.innerHTML = "";
 
@@ -54,6 +113,10 @@ function input() {
     let modalTitle = document.createElement("p");
     modalTitle.className = 'modalTitle';
     modalTitle.textContent = 'Fill out the Information Below';
+
+    var errorMessage = document.createElement('div');
+    errorMessage.className = 'error-message';
+    errorMessage.style.color = 'red';
 
     var project = document.createElement('input');
     project.type = 'text';
@@ -80,27 +143,29 @@ function input() {
     priority.id = 'Priority';
 
     var lowOption = document.createElement('option');
-    lowOption.value = 'low_Option';
+    lowOption.value = 'low option';
     lowOption.text = 'Low';
     priority.appendChild(lowOption); 
 
     var mediumOption = document.createElement('option');
-    mediumOption.value = 'medium_Option';
+    mediumOption.value = 'medium option';
     mediumOption.text = 'Medium';
     priority.appendChild(mediumOption);
 
     var highOption = document.createElement('option');
-    highOption.value = 'high_Option';
+    highOption.value = 'high option';
     highOption.text = 'High';
     priority.appendChild(highOption);
 
     var submitButton = document.createElement("button");
+    submitButton.type = 'submit';
     submitButton.textContent = 'Submit';
 
     var cancelButton = document.createElement("button");
     cancelButton.textContent = "Cancel";
 
     form.appendChild(modalTitle);
+    form.appendChild(errorMessage);
     form.appendChild(project);
     form.appendChild(taskName);
     form.appendChild(description);
@@ -113,17 +178,9 @@ function input() {
 
     modal.style.display = "block";
 
-    submitButton.addEventListener("click", submitInfo);
+    form.addEventListener("submit", (event) => submitInfo(event, errorMessage));
 
-    cancelButton.onclick = function () {
-        modal.style.display = "none";
-    }
-
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
+    cancelButton.addEventListener("click", closeModal);
 }
 
-export {input};
+export {createTodo, addTodoToList, displayTodo, submitInfo, closeModal, openModal, input};

@@ -1,6 +1,6 @@
 import './style.css';
-import { renderHomepage, clearHomePage } from "./render_Homepage";
-import { input } from "./create_Todo";
+import { renderHomepage } from "./render_Homepage";
+import { createTodo, addTodoToList, displayTodo, submitInfo, closeModal, openModal, input } from "./create_Todo";
 
 renderHomepage();
 console.log("working");
