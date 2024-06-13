@@ -17,8 +17,4 @@ function renderHomepage () {
     content.appendChild(homepageDiv);
 }
 
-function clearHomePage () {
-    content.innerHTML = "";
-}
-
-export { renderHomepage, clearHomePage };
+export { renderHomepage };
