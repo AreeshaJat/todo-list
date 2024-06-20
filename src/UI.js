@@ -1,6 +1,30 @@
 import { addTodoToList, getTodos } from "./create_Todo";
 
 var modal = document.getElementById('myModal');
+var projectList = document.getElementById('project-list');
+
+function displayProject() {
+    const projects = document.getElementById('project-list');
+
+    projects.innerHTML = "";
+
+    const todos = getTodos();
+
+    todos.forEach(todo => {
+        const titles = document.createElement("div");
+        titles.className = "titles";
+
+        const titleContents = document.createElement("div");
+        titleContents.className = "titleContents";
+
+        const titleProject = document.createElement("h3");
+        titleProject.classList.add('titleProject');
+        titleProject.textContent = todo.title;
+        titleContents.appendChild(titleProject);
+        titles.appendChild(titleContents);
+        projects.appendChild(titles);
+    });
+}
 
 function displayTodo() {
     const todoCard = document.querySelector('.content');
@@ -23,25 +47,60 @@ function displayTodo() {
         const cardContents = document.createElement("div");
         cardContents.className = "cardContents";
 
-        const checklist = document.createElement("input");
-        checklist.classList.add('checklist');
-        checklist.type = 'checkbox';
-        cardContents.appendChild(checklist);
+        const priorcheckDiv = document.createElement("div");
+        priorcheckDiv.classList.add('priorcheckDiv');
+        cardContents.appendChild(priorcheckDiv);
 
         const priority = document.createElement("div");
         priority.classList.add('priority');
         priority.textContent = todo.priority;
-        cardContents.appendChild(priority);
+        if (todo.priority === 'Low') {
+            priority.style.backgroundColor = '#8FBC8F';
+            priority.style.height = '100px';
+            priority.style.width = '200px';
+        } else if (todo.priority === 'Medium') {
+            priority.style.backgroundColor = '#FADA5E'; 
+            priority.style.height = '100px';
+            priority.style.width = '200px';
+        } else if (todo.priority === 'High') {
+            priority.style.backgroundColor = '#E57373'; 
+            priority.style.height = '100px';
+            priority.style.width = '200px';
+        }
+        priorcheckDiv.appendChild(priority);
+
+        const checklist = document.createElement("input");
+        checklist.classList.add('checklist');
+        checklist.type = 'checkbox';
+        checklist.style.height = '25px';
+        checklist.style.width = '25px';
+        priorcheckDiv.appendChild(checklist);
 
         const description = document.createElement("p");
         description.classList.add('description');
         description.textContent = todo.description;
+        description.style.fontWeight = 'bold';
         cardContents.appendChild(description);
 
         const dueDate = document.createElement("p");
         dueDate.classList.add('dueDate');
         dueDate.textContent = todo.dueDate;
         cardContents.appendChild(dueDate);
+
+        const buttonsDiv = document.createElement("div");
+        buttonsDiv.classList.add('buttonsDiv');
+        buttonsDiv.className = "buttonsDiv";
+        cardContents.appendChild(buttonsDiv);
+
+        const editButton = document.createElement("button");
+        editButton.classList.add('editButton');
+        editButton.textContent = '';
+        buttonsDiv.appendChild(editButton);
+
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add('deleteButton');
+        deleteButton.textContent = '';
+        buttonsDiv.appendChild(deleteButton);
 
         card.appendChild(cardContents);
         todoCard.appendChild(card);
@@ -85,6 +144,7 @@ function submitInfo(event, errorMessage) {
 
     closeModal();
     displayTodo();
+    displayProject();
 
 }
 
@@ -140,17 +200,17 @@ function input() {
     priority.id = 'Priority';
 
     const lowOption = document.createElement('option');
-    lowOption.value = 'low option';
+    lowOption.value = 'Low';
     lowOption.text = 'Low';
     priority.appendChild(lowOption); 
 
     const mediumOption = document.createElement('option');
-    mediumOption.value = 'medium option';
+    mediumOption.value = 'Medium';
     mediumOption.text = 'Medium';
     priority.appendChild(mediumOption);
 
     const highOption = document.createElement('option');
-    highOption.value = 'high option';
+    highOption.value = 'High';
     highOption.text = 'High';
     priority.appendChild(highOption);
 

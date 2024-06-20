@@ -79,22 +79,21 @@ body {
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
-    width: 400px; /* Could be more or less, depending on screen size */
+    width: 400px; 
     height: 400px;
 }
 
 .card {
-    background-color: #FAEBD7; /* Antique White */
-    /*border-left: 5px solid #DAA520; /* Goldenrod */
+    background-color: #FAEBD7; 
     border-radius: 10px;
     width: 100%;
-    height: 200px;
+    height: 100px;
     margin: 10px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 10px;
+    padding-right: 20px;
     box-sizing: border-box;
 }
 
@@ -102,10 +101,52 @@ body {
     display: flex;
     flex-direction: row; /* Keep the direction as row */
     align-items: center;
-    gap: 1rem; /* Add gap for spacing between elements */
+    justify-content: space-between;
     width: 100%; /* Ensure it spans the full width of the card */
 }
 
-.card .priority, .card .checklist, .card .title, .card .dueDate {
-    flex: 1; /* Ensure elements are spaced out evenly */
+.priorcheckDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.priority {
+    color: white;
+    font-weight: bold;
+    height: 100%; /* Takes full height of card */
+    width: 100px; /* Fixed width for priority column */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.buttonsDiv {
+    display: flex;
+    gap: 8px;
+}
+
+.buttonsDiv button {
+    cursor: pointer;
+    height: 25px;
+    width: 25px;
+}
+
+.deleteButton {
+    background-image: url(../images/trashCan.png);
+    background-size: contain; /* to make the entire image fit within the button */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: white;
+}
+
+.editButton {
+    background-image: url(../images/delete.png);
+    background-size: contain; /* to make the entire image fit within the button */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: white;
 }
