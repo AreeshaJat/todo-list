@@ -20,4 +20,4 @@ function getTodos () {
     return todoList;
 }
 
-export {createTodo, addTodoToList, getTodos};
+export { todoList, createTodo, addTodoToList, getTodos};
