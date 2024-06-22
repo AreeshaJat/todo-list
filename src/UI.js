@@ -1,29 +1,99 @@
 import { todoList, addTodoToList, getTodos } from "./create_Todo";
 
 var modal = document.getElementById('myModal');
+var addProject = document.getElementById('addProject');
+var projectList = [];
 
-/*function displayProject() {
-    const projects = document.getElementById('project-list');
+function inputProject() {
+    addProject.innerHTML = '';
 
-    projects.innerHTML = "";
+    const projectInput = document.createElement('input');
+    projectInput.type = 'text';
+    projectInput.name = 'project';
+    projectInput.placeholder = 'Project Name';
 
-    const todos = getTodos();
+    const submitButton = document.createElement("button");
+    submitButton.type = 'submit';
+    submitButton.textContent = 'Submit';
 
-    todos.forEach(todo => {
-        const titles = document.createElement("div");
-        titles.className = "titles";
+    const form = document.createElement('form');
+    form.appendChild(projectInput);
+    form.appendChild(submitButton);
 
-        const titleContents = document.createElement("div");
-        titleContents.className = "titleContents";
-
-        const titleProject = document.createElement("h3");
-        titleProject.classList.add('titleProject');
-        titleProject.textContent = todo.title;
-        titleContents.appendChild(titleProject);
-        titles.appendChild(titleContents);
-        projects.appendChild(titles);
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitProject(event); 
     });
-}*/
+
+    addProject.appendChild(form);
+}
+
+function submitProject(event) {
+    event.preventDefault();
+    console.log('Form submitted');
+
+    // Get the project name from the input field
+    const project_name = document.querySelector('input[name=project]').value;
+
+    console.log('Project Name:', project_name);
+
+    // Validate the input
+    let errorMessage = document.getElementById('error-message');
+    if (!project_name) {
+        if (!errorMessage) {
+            errorMessage = document.createElement('p');
+            errorMessage.id = 'error-message';
+            errorMessage.style.color = 'red';
+            errorMessage.textContent = 'Field is required.';
+            addProject.appendChild(errorMessage);
+        } else {
+            errorMessage.textContent = 'Field is required.';
+        }
+        console.log('Error Message:', errorMessage.textContent);
+        return;
+    } else {
+        if (errorMessage) {
+            errorMessage.textContent = "";
+            console.log('Error Message cleared');
+        }
+    }
+
+    if (projectList.includes(project_name)) {
+        errorMessage.textContent = 'Project name already exists';
+        return;
+    }
+
+    // If valid, add project name to the list and display it
+    projectList.push(project_name);
+    displayProject();
+
+    // Clear the input field
+    document.querySelector('input[name=project]').value = "";
+
+    const form = addProject.querySelector('form');
+    if (form) {
+        form.style.display = 'none';
+    }
+}
+
+
+function displayProject() {
+    const projectListContainer = document.getElementById('project-list');
+    projectListContainer.innerHTML = "";
+    //projects.innerHTML = "";
+
+    projectList.forEach((projectName, index) => {
+        const projectItem = document.createElement('li');
+
+        const projectLink = document.createElement('a');
+        projectLink.href = `#project-${index}`;
+        projectLink.textContent = projectName;
+        projectLink.addEventListener('click', () => filterTodosByProject(projectName));
+
+        projectItem.appendChild(projectLink);
+        projectListContainer.appendChild(projectItem);
+    });
+}
 
 function displayTodo() {
     const todoCard = document.querySelector('.content');
@@ -117,6 +187,75 @@ function displayTodo() {
     });
 }
 
+function filterTodosByProject(projectName) {
+    //checking if the project property of the current todo === projectName
+    const filteredTodos = todoList.filter(todo => todo.project === projectName);
+    displayFilteredTodos(filteredTodos);
+}
+
+// Function to display filtered todos
+function displayFilteredTodos(filteredTodos) {
+    const todoCard = document.querySelector('.content');
+    todoCard.innerHTML = "";
+
+    filteredTodos.forEach((todo, index) => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const cardContents = document.createElement("div");
+        cardContents.className = "cardContents";
+
+        // Other todo details
+        const priorityDiv = document.createElement("div");
+        priorityDiv.classList.add('priority');
+        priorityDiv.textContent = todo.priority;
+        // Set background color based on priority
+        if (todo.priority === 'Low') {
+            priorityDiv.style.backgroundColor = '#8FBC8F';
+        } else if (todo.priority === 'Medium') {
+            priorityDiv.style.backgroundColor = '#FADA5E';
+        } else if (todo.priority === 'High') {
+            priorityDiv.style.backgroundColor = '#E57373';
+        }
+        cardContents.appendChild(priorityDiv);
+
+        const description = document.createElement("p");
+        description.classList.add('description');
+        description.textContent = todo.description;
+        cardContents.appendChild(description);
+
+        const dueDate = document.createElement("p");
+        dueDate.classList.add('dueDate');
+        dueDate.textContent = todo.dueDate;
+        cardContents.appendChild(dueDate);
+
+        const buttonsDiv = document.createElement("div");
+        buttonsDiv.classList.add('buttonsDiv');
+
+        const editButton = document.createElement("button");
+        editButton.classList.add('editButton');
+        editButton.textContent = 'Edit';
+        editButton.addEventListener('click', () => openEditModal(todo, index));
+        buttonsDiv.appendChild(editButton);
+
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add('deleteButton');
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', () => deleteTodo(index));
+        buttonsDiv.appendChild(deleteButton);
+
+        cardContents.appendChild(buttonsDiv);
+        card.appendChild(cardContents);
+        todoCard.appendChild(card);
+    });
+}
+
+// Function to delete a todo
+/*function deleteTodo(index) {
+    todoList.splice(index, 1);
+    displayTodo();
+}*/
+
 function submitInfo(event, errorMessage) {
     event.preventDefault();
     console.log('Form submitted');
@@ -125,6 +264,7 @@ function submitInfo(event, errorMessage) {
     const todo_description = document.querySelector('input[name=description]').value;
     const todo_dueDate = document.querySelector('input[name=inputDate]').value;
     const todo_priority = document.querySelector('select[name=priority]').value;
+    const project_name = document.querySelector('input[name=project]').value;
 
     console.log('Task Name:', todo_title);
     console.log('Description:', todo_description);
@@ -132,7 +272,7 @@ function submitInfo(event, errorMessage) {
     console.log('Priority:', todo_priority);
 
     // Validate the input
-    if (!todo_title || !todo_description || !todo_dueDate || !todo_priority) {
+    if (!todo_title || !todo_description || !todo_dueDate || !todo_priority || project_name) {
         errorMessage.textContent = 'Field is required.';
         console.log('Error Message:', errorMessage.textContent);
         return;
@@ -141,7 +281,7 @@ function submitInfo(event, errorMessage) {
         console.log('Error Message cleared');
     }
 
-    addTodoToList(todo_title, todo_description, todo_dueDate, todo_priority, false);
+    addTodoToList(todo_title, todo_description, todo_dueDate, todo_priority, false, project_name);
 
     //clear input fields
     document.querySelector('input[name="taskName"]').value = "";
@@ -151,7 +291,6 @@ function submitInfo(event, errorMessage) {
 
     closeModal();
     displayTodo();
-    //displayProject();
 
 }
 
@@ -174,11 +313,6 @@ function openEditModal(todo, index) {
     const errorMessage = document.createElement('div');
     errorMessage.className = 'error-message';
     errorMessage.style.color = 'red';
-
-    /*const project = document.createElement('input');
-    project.type = 'text';
-    project.name = 'project';
-    project.placeholder = 'Project';*/
 
     const taskName = document.createElement('input');
     taskName.type = 'text';
@@ -279,7 +413,6 @@ function updateTodo(event, index, errorMessage) {
 
     closeModal();
     displayTodo();
-    //displayProject();
 }
 
 function openModal () {
@@ -308,11 +441,6 @@ function input() {
     const errorMessage = document.createElement('div');
     errorMessage.className = 'error-message';
     errorMessage.style.color = 'red';
-
-    /*const project = document.createElement('input');
-    project.type = 'text';
-    project.name = 'project';
-    project.placeholder = 'Project';*/
 
     const taskName = document.createElement('input');
     taskName.type = 'text';
@@ -375,4 +503,4 @@ function input() {
     cancelButton.addEventListener("click", closeModal);
 }
 
-export {openModal, closeModal, input, displayTodo}
+export {openModal, closeModal, input, displayTodo, inputProject}

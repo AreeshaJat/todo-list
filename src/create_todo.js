@@ -1,17 +1,18 @@
 class createTodo {
-    constructor(title, description, dueDate, priority, checklist) {
+    constructor(title, description, dueDate, priority, checklist, project) {
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
         this.checklist = checklist;
+        this.project = project;
     }
 }
 
 const todoList = [];
 
-function addTodoToList(title, description, dueDate, priority, checklist) {
-    const todoItem = new createTodo(title, description, dueDate, priority, checklist);
+function addTodoToList(title, description, dueDate, priority, checklist, projectName) {
+    const todoItem = new createTodo(title, description, dueDate, priority, checklist, projectName);
     todoList.push(todoItem);
 }
 
