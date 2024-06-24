@@ -14,6 +14,11 @@ function renderHomepage () {
     para.textContent = "Create a new project by clicking the 'New +' button";
     homepageDiv.appendChild(para);
 
+    let currentProject = document.createElement("div");
+    currentProject.classList.add('current-project');
+    currentProject.style.display = 'none';
+    homepageDiv.appendChild(currentProject);
+
     content.appendChild(homepageDiv);
 }
 
