@@ -250,12 +250,6 @@ function displayFilteredTodos(filteredTodos) {
     });
 }
 
-// Function to delete a todo
-/*function deleteTodo(index) {
-    todoList.splice(index, 1);
-    displayTodo();
-}*/
-
 function submitInfo(event, errorMessage) {
     event.preventDefault();
     console.log('Form submitted');
@@ -264,7 +258,8 @@ function submitInfo(event, errorMessage) {
     const todo_description = document.querySelector('input[name=description]').value;
     const todo_dueDate = document.querySelector('input[name=inputDate]').value;
     const todo_priority = document.querySelector('select[name=priority]').value;
-    const project_name = document.querySelector('input[name=project]').value;
+    console.log('error');
+    //const project_name = document.querySelector('input[name=project]').value;
 
     console.log('Task Name:', todo_title);
     console.log('Description:', todo_description);
@@ -272,15 +267,33 @@ function submitInfo(event, errorMessage) {
     console.log('Priority:', todo_priority);
 
     // Validate the input
-    if (!todo_title || !todo_description || !todo_dueDate || !todo_priority || project_name) {
-        errorMessage.textContent = 'Field is required.';
+    if (!todo_title || !todo_description || !todo_dueDate || !todo_priority) {
+        if (!errorMessage) {
+            errorMessage = document.createElement('p');
+            errorMessage.className = 'error-message';
+            errorMessage.style.color = 'red';
+            form.appendChild(errorMessage);
+        }
+        errorMessage.textContent = 'All fields are required.';
         console.log('Error Message:', errorMessage.textContent);
         return;
-    } else {
-        errorMessage.textContent = "";
-        console.log('Error Message cleared');
+    } 
+
+    if (projectList.length === 0) {
+        if (!errorMessage) {
+            errorMessage = document.createElement('p');
+            errorMessage.className = 'error-message';
+            errorMessage.style.color = 'red';
+            form.appendChild(errorMessage);
+        }
+        errorMessage.textContent = 'You must create a project first.';
+        console.log('Error Message:', errorMessage.textContent);
+        return;
     }
 
+    errorMessage.textContent = "";
+
+    const project_name = projectList[0]; //first project is used
     addTodoToList(todo_title, todo_description, todo_dueDate, todo_priority, false, project_name);
 
     //clear input fields
