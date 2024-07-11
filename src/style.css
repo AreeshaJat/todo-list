@@ -5,6 +5,10 @@ body {
     height: 100vh; /*reaches 100% of height of the screen*/
 }
 
+h1, p, a, button, input {
+    font-family: Roboto, sans-serif;
+}
+
 .grid {
     display: grid;
     grid-template-columns: 1fr 3fr;
