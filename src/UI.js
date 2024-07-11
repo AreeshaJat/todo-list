@@ -164,6 +164,7 @@ function displayTodo() {
     const todoCard = document.querySelector('.content');
     todoCard.innerHTML = "";
     const todos = getTodos();
+    console.log('Todos:', todos); // Added for debugging
     todos.forEach((todo, index) => {
         const card = createTodoCard(todo, index);
         todoCard.appendChild(card);
@@ -192,14 +193,14 @@ function submitInfo(event, errorMessage) {
     const todo_description = document.querySelector('input[name=description]').value;
     const todo_dueDate = document.querySelector('input[name=inputDate]').value;
     const todo_priority = document.querySelector('select[name=priority]').value;
-    console.log('error');
-
+    const selectedProject = document.querySelector('select[name=projectSelector]').value;
     console.log('Task Name:', todo_title);
     console.log('Description:', todo_description);
     console.log('Due Date:', todo_dueDate);
     console.log('Priority:', todo_priority);
+    console.log('Project:', selectedProject);
 
-    if (!todo_title || !todo_description || !todo_dueDate || !todo_priority) {
+    if (!todo_title || !todo_description || !todo_dueDate || !todo_priority || !selectedProject) {
         if (!errorMessage) {
             errorMessage = document.createElement('p');
             errorMessage.className = 'error-message';
@@ -211,22 +212,10 @@ function submitInfo(event, errorMessage) {
         return;
     } 
 
-    if (projectList.length === 0) {
-        if (!errorMessage) {
-            errorMessage = document.createElement('p');
-            errorMessage.className = 'error-message';
-            errorMessage.style.color = 'red';
-            form.appendChild(errorMessage);
-        }
-        errorMessage.textContent = 'You must create a project first.';
-        console.log('Error Message:', errorMessage.textContent);
-        return;
-    }
-
     errorMessage.textContent = "";
 
-    const project_name = projectList[projectList.length - 1]; // last created project is used
-    addTodoToList(todo_title, todo_description, todo_dueDate, todo_priority, false, project_name);
+    addTodoToList(todo_title, todo_description, todo_dueDate, todo_priority, false, selectedProject);
+    console.log('Todo List:', todoList); // Added for debugging
 
     document.querySelector('input[name="taskName"]').value = "";
     document.querySelector('input[name="description"]').value = "";
@@ -410,6 +399,15 @@ function input() {
     highOption.text = 'High';
     priority.appendChild(highOption);
 
+    const projectSelector = document.createElement('select');
+    projectSelector.name = 'projectSelector';
+    projectList.forEach((projectName) => {
+        const option = document.createElement('option');
+        option.value = projectName;
+        option.text = projectName;
+        projectSelector.appendChild(option);
+    });
+
     const submitButton = document.createElement("button");
     submitButton.type = 'submit';
     submitButton.textContent = 'Submit';
@@ -423,6 +421,7 @@ function input() {
     form.appendChild(description);
     form.appendChild(inputDate);
     form.appendChild(priority);
+    form.appendChild(projectSelector);
     form.appendChild(submitButton);
     form.appendChild(cancelButton);
     modalContent.appendChild(form);
