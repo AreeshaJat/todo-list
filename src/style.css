@@ -88,6 +88,25 @@ h1, p, a, button, input {
     padding: 1rem;
     border-top: 1px solid black;
     width: 18vw;
+    list-style-type: none;
+    display: block; 
+}
+
+.project-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.project-link {
+    text-decoration: none; /* remove underline */
+    color: black;
+    font-size: 20px;
+}
+
+.project-link:hover {
+    color: white;
 }
 
 .modal {
@@ -172,10 +191,24 @@ h1, p, a, button, input {
     background-color: white;
 }
 
+.deleteProjectButton {
+    background-image: url(../images/trashCan.png);
+    background-size: contain; /* to make the entire image fit within the button */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: white;
+}
+
 .editButton {
     background-image: url(../images/delete.png);
     background-size: contain; /* to make the entire image fit within the button */
     background-repeat: no-repeat;
     background-position: center;
     background-color: white;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
