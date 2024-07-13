@@ -23,5 +23,4 @@ The todo-list page allows users to first add a project name and then click on th
 8. Explore the webpack.config.js to get an idea about how everything is imported.
 9. Explore the dist folder to see the index.html page generated after you run npx webpack.
 
-## Viewing the Webpage
-To view the completed webpage, follow this link:
+## LIVE DEMO
